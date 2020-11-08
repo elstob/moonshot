@@ -25,6 +25,8 @@ const handler = async (event) => {
 
     const candidates = pairWords.filter((word) => word.startsWith(prefix));
 
+    console.log(candidates);
+
     const candidate = candidates[~~(Math.random() * candidates.length)];
 
     const randomCharacter =
