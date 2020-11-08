@@ -16,8 +16,8 @@ const Game = () => {
       const response = await fetch("/.netlify/functions/start-word");
       const { startWord } = await response.json();
       if (startWord) {
-        // setPrefix(startWord);
-        setPrefix("mill"); // Debug by forcing start word
+        setPrefix(startWord);
+        // setPrefix("mill"); // Debug by forcing start word
       }
     };
     if (!prefix) {
@@ -56,8 +56,9 @@ const Game = () => {
         setPrefix(suffix);
         setChain((chain) => [...chain, word]);
       } else if (response.status === 404) {
-        setSelection([]);
         setChain([]);
+        setSelection([]);
+        setPrefix("");
         alert("GAME OVER!");
       }
     };
@@ -87,7 +88,22 @@ const Game = () => {
           </div>
         ))}
       {!!selection.length && <h2>{selection}</h2>}
-      {!!chain.length && <h2>{chain.join(" / ")}</h2>}
+      {!!chain.length && (
+        <h2>
+          {chain.map((word, index) => (
+            <React.Fragment key={`${word}-${index}`}>
+              <a
+                href={`https://www.dictionary.com/browse/${word}`}
+                rel="noreferrer"
+                target="_blank"
+              >
+                {word}
+              </a>{" "}
+              /{" "}
+            </React.Fragment>
+          ))}
+        </h2>
+      )}
     </div>
   );
 };
