@@ -4,7 +4,7 @@ const fs = require("fs");
 const handler = async (event) => {
   try {
     const startWords = fs
-      .readFileSync("./data/start_prefixes.txt", "utf8")
+      .readFileSync("./functions/shared/start_prefixes.txt", "utf8")
       .split("\r\n");
 
     const startWord = startWords[~~(Math.random() * startWords.length)];

@@ -12,7 +12,7 @@ const handler = async (event) => {
     }
 
     const pairWords = fs
-      .readFileSync("./data/pair_words.txt", "utf8")
+      .readFileSync("./functions/shared/pair_words.txt", "utf8")
       .split("\r\n");
 
     if (pairWords.includes(word)) {
