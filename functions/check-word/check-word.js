@@ -1,4 +1,7 @@
 const fs = require("fs");
+const path = require("path");
+
+const currentDir = process.env.LAMBDA_TASK_ROOT;
 
 // Docs on event and context https://www.netlify.com/docs/functions/#the-handler-method
 const handler = async (event) => {
@@ -11,8 +14,13 @@ const handler = async (event) => {
       return { statusCode: 500, body: "Provided word is incorrect length" };
     }
 
+    console.log("currentDir", currentDir);
+
     const pairWords = fs
-      .readFileSync(require.resolve("../shared/pair_words.txt"), "utf8")
+      .readFileSync(
+        path.join(currentDir, "../check-word/pair_words.txt"),
+        "utf8"
+      )
       .split("\r\n");
 
     if (pairWords.includes(word)) {

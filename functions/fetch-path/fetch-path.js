@@ -1,6 +1,8 @@
 const fs = require("fs");
+const path = require("path");
 
 const alphabet = "abcdefghijklmnopqrstuvwxyz";
+const currentDir = process.env.LAMBDA_TASK_ROOT;
 
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -20,7 +22,10 @@ const handler = async (event) => {
     }
 
     const pairWords = fs
-      .readFileSync(require.resolve("../shared/pair_words.txt"), "utf8")
+      .readFileSync(
+        path.join(currentDir, "../check-word/pair_words.txt"),
+        "utf8"
+      )
       .split("\r\n");
 
     const candidates = pairWords.filter((word) => word.startsWith(prefix));
@@ -46,13 +51,13 @@ const handler = async (event) => {
 
     console.log(`${candidate.slice(-4)}${randomCharacter}`.split(""));
 
-    const path = shuffleArray(
+    const letters = shuffleArray(
       `${candidate.slice(-4)}${randomCharacter}`.split("")
     );
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ path }),
+      body: JSON.stringify({ path: letters }),
     };
   } catch (error) {
     return { statusCode: 500, body: error.toString() };
