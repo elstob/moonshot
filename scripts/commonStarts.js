@@ -24,7 +24,13 @@ try {
     return second[1] - first[1];
   });
 
-  console.log(results);
+  fs.writeFileSync(
+    "./data/start-prefixes.txt",
+    results
+      .map(([word, count]) => word)
+      .slice(0, 30)
+      .join("\r\n")
+  );
 } catch (e) {
   console.log("Error:", e.stack);
 }
