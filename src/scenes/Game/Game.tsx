@@ -70,7 +70,19 @@ const Game = () => {
       {prefix && <h2>{prefix}</h2>}
       {!!path.length &&
         path.map((letter, index) => (
-          <div key={`${letter}${index}`} onClick={() => pickLetter(letter)}>
+          <div
+            key={`${letter}${index}`}
+            onClick={() => pickLetter(letter)}
+            style={{
+              border: "1px solid black",
+              display: "inline-block",
+              lineHeight: "3rem",
+              height: "3rem",
+              margin: "1rem",
+              textAlign: "center",
+              width: "3rem",
+            }}
+          >
             {letter}
           </div>
         ))}

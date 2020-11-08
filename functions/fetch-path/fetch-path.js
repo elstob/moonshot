@@ -25,9 +25,21 @@ const handler = async (event) => {
 
     const candidates = pairWords.filter((word) => word.startsWith(prefix));
 
-    console.log(candidates);
+    // where possible select a candiate that has a pathway
+    const candidateWithPaths = [];
+    candidates.forEach((word) => {
+      const suffix = word.slice(-4);
+      const pathways = pairWords.filter((pairWord) =>
+        pairWord.startsWith(suffix)
+      ).length;
+      if (pathways > 0) {
+        candidateWithPaths.push(word);
+      }
+    });
 
-    const candidate = candidates[~~(Math.random() * candidates.length)];
+    const candidate = !!candidateWithPaths.length
+      ? candidateWithPaths[~~(Math.random() * candidateWithPaths.length)]
+      : candidates[~~(Math.random() * candidates.length)];
 
     const randomCharacter =
       alphabet[Math.floor(Math.random() * alphabet.length)];
