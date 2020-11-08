@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
+import checkWord from "../../utils/checkWord";
+import getPath from "../../utils/getPath";
+import getStartWord from "../../utils/getStartWord";
 
 const Game = () => {
   const [prefix, setPrefix] = useState("");
-  const [path, setPath] = useState([]);
+  const [path, setPath] = useState<string[]>([]);
   const [selection, setSelection] = useState<string[]>([]);
   const [chain, setChain] = useState<string[]>([]);
 
@@ -12,16 +15,9 @@ const Game = () => {
 
   // Fetch a starting word
   useEffect(() => {
-    const fetchPrefix = async () => {
-      const response = await fetch("/.netlify/functions/start-word");
-      const { startWord } = await response.json();
-      if (startWord) {
-        setPrefix(startWord);
-        // setPrefix("mill"); // Debug by forcing start word
-      }
-    };
     if (!prefix) {
-      fetchPrefix();
+      const startWord = getStartWord();
+      setPrefix(startWord);
     }
   }, [prefix]);
 
@@ -29,40 +25,27 @@ const Game = () => {
     if (!prefix) {
       return;
     }
-    const fetchPath = async () => {
-      const response = await fetch(
-        `/.netlify/functions/fetch-path?prefix=${prefix}`
-      );
-      const { path } = await response.json();
-      if (path) {
-        setPath(path);
-      }
-    };
-    fetchPath();
+    const newPath = getPath(prefix);
+    setPath(newPath);
   }, [prefix]);
 
   useEffect(() => {
     if (selection.length !== 4) {
       return;
     }
-    const checkWord = async () => {
-      const suffix = selection.join("");
-      const word = `${prefix}${suffix}`;
-      const response = await fetch(
-        `/.netlify/functions/check-word?word=${word}`
-      );
-      if (response.status === 200) {
-        setSelection([]);
-        setPrefix(suffix);
-        setChain((chain) => [...chain, word]);
-      } else if (response.status === 404) {
-        setChain([]);
-        setSelection([]);
-        setPrefix("");
-        alert("GAME OVER!");
-      }
-    };
-    checkWord();
+    const suffix = selection.join("");
+    const word = `${prefix}${suffix}`;
+    if (checkWord(word)) {
+      console.log("word", word);
+      setSelection([]);
+      setPrefix(suffix);
+      setChain((chain) => [...chain, word]);
+    } else {
+      setChain([]);
+      setSelection([]);
+      setPrefix("");
+      alert("GAME OVER!");
+    }
   }, [prefix, selection]);
 
   return (
