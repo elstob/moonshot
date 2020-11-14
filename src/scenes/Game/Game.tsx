@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from "react";
+import Path from "../../components/Path";
+import Stage from "../../components/Stage";
+import Word from "../../components/Word";
 import checkWord from "../../utils/checkWord";
 import getPath from "../../utils/getPath";
 import getStartWord from "../../utils/getStartWord";
 
 const Game = () => {
-  const [prefix, setPrefix] = useState("");
-  const [path, setPath] = useState<string[]>([]);
-  const [selection, setSelection] = useState<string[]>([]);
   const [chain, setChain] = useState<string[]>([]);
+  const [path, setPath] = useState<string[]>([]);
+  const [prefix, setPrefix] = useState("");
+  const [selection, setSelection] = useState<string[]>([]);
+  const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
 
-  const pickLetter = (letter: string) => {
+  const pickLetter = (letter: string, index: number) => {
     setSelection((selection) => [...selection, letter]);
+    setSelectedIndexes((selectedIndexes) => [...selectedIndexes, index]);
   };
 
   // Fetch a starting word
@@ -39,41 +44,30 @@ const Game = () => {
     const suffix = selection.join("");
     const word = `${prefix}${suffix}`;
     if (checkWord(word)) {
-      console.log("word", word);
       setSelection([]);
+      setSelectedIndexes([]);
       setPrefix(suffix);
       setChain((chain) => [...chain, word]);
     } else {
       setChain([]);
       setSelection([]);
+      setSelectedIndexes([]);
       setPrefix("");
       alert("GAME OVER!");
     }
   }, [prefix, selection]);
 
   return (
-    <div>
-      <h1>MOONSHOT</h1>
-      {prefix && <h2>{prefix}</h2>}
-      {!!path.length &&
-        path.map((letter, index) => (
-          <div
-            key={`${letter}${index}`}
-            onClick={() => pickLetter(letter)}
-            style={{
-              border: "1px solid black",
-              display: "inline-block",
-              lineHeight: "3rem",
-              height: "3rem",
-              margin: "1rem",
-              textAlign: "center",
-              width: "3rem",
-            }}
-          >
-            {letter}
-          </div>
-        ))}
-      {!!selection.length && <h2>{selection}</h2>}
+    <Stage>
+      {!!path.length && (
+        <Path
+          pickLetter={pickLetter}
+          selectedIndexes={selectedIndexes}
+          value={path}
+        />
+      )}
+      {prefix && <Word value={prefix}></Word>}
+      {!!selection.length && <Word value={selection.join("")} />}
       {!!chain.length && (
         <h2>
           {chain.map((word, index) => (
@@ -90,7 +84,7 @@ const Game = () => {
           ))}
         </h2>
       )}
-    </div>
+    </Stage>
   );
 };
 
