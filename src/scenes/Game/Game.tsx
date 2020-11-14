@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Path from "../../components/Path";
 import Stage from "../../components/Stage";
 import Word from "../../components/Word";
@@ -13,10 +13,42 @@ const Game = () => {
   const [selection, setSelection] = useState<string[]>([]);
   const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
 
-  const pickLetter = (letter: string, index: number) => {
-    setSelection((selection) => [...selection, letter]);
-    setSelectedIndexes((selectedIndexes) => [...selectedIndexes, index]);
-  };
+  const pickLetter = useCallback(
+    (index: number) => {
+      setSelection((selection) => [...selection, path[index]]);
+      setSelectedIndexes((selectedIndexes) => [...selectedIndexes, index]);
+    },
+    [path]
+  );
+
+  const removeLetter = useCallback((index: number) => {
+    setSelection((selection) => selection.splice(index, 1));
+    setSelectedIndexes((selectedIndexes) => selectedIndexes.splice(index, 1));
+  }, []);
+
+  const keyHandler = useCallback(
+    (event: KeyboardEvent) => {
+      const { key } = event;
+      if (path.includes(key)) {
+        const index = path.findIndex(
+          (letter, index) => letter === key && !selectedIndexes.includes(index)
+        );
+        if (index > -1) {
+          pickLetter(index);
+        }
+      }
+      if (key === "Backspace" && selection.length > 0) {
+        setSelection((selection) => selection.slice(0, -1));
+        setSelectedIndexes((selectedIndexes) => selectedIndexes.slice(0, -1));
+      }
+    },
+    [path, pickLetter, selectedIndexes, selection.length]
+  );
+
+  useEffect(() => {
+    document.addEventListener("keydown", keyHandler);
+    return () => document.removeEventListener("keydown", keyHandler);
+  }, [keyHandler]);
 
   // Fetch a starting word
   useEffect(() => {
@@ -62,6 +94,7 @@ const Game = () => {
       {!!path.length && (
         <Path
           pickLetter={pickLetter}
+          removeLetter={removeLetter}
           selectedIndexes={selectedIndexes}
           value={path}
         />

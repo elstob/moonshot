@@ -2,12 +2,13 @@ import React from "react";
 import styled, { css, keyframes } from "styled-components";
 
 interface IProps {
-  pickLetter: (letter: string, index: number) => void;
+  pickLetter: (index: number) => void;
+  removeLetter: (index: number) => void;
   selectedIndexes: number[];
   value: string[];
 }
 
-const Path = ({ pickLetter, selectedIndexes, value }: IProps) => (
+const Path = ({ pickLetter, removeLetter, selectedIndexes, value }: IProps) => (
   <Container>
     {value.map((letter, index) => {
       const selected = selectedIndexes.includes(index);
@@ -15,7 +16,7 @@ const Path = ({ pickLetter, selectedIndexes, value }: IProps) => (
         <Star
           selected={selected}
           key={`${letter}${index}`}
-          onClick={selected ? undefined : () => pickLetter(letter, index)}
+          onClick={() => (selected ? removeLetter(index) : pickLetter(index))}
         >
           {letter}
         </Star>
