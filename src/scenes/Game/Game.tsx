@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import Chain from "../../components/Chain";
 import Path from "../../components/Path";
 import Stage from "../../components/Stage";
 import Word from "../../components/Word";
@@ -101,22 +102,7 @@ const Game = () => {
       )}
       {prefix && <Word value={prefix}></Word>}
       {!!selection.length && <Word value={selection.join("")} />}
-      {!!chain.length && (
-        <h2>
-          {chain.map((word, index) => (
-            <React.Fragment key={`${word}-${index}`}>
-              <a
-                href={`https://merriam-webster.com/dictionary/${word}`}
-                rel="noreferrer"
-                target="_blank"
-              >
-                {word}
-              </a>{" "}
-              /{" "}
-            </React.Fragment>
-          ))}
-        </h2>
-      )}
+      <Chain chain={chain} />
     </Stage>
   );
 };
