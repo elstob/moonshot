@@ -2,7 +2,7 @@ const fs = require("fs");
 
 try {
   const pair_words = fs
-    .readFileSync("./data/pair_words.txt", "utf8")
+    .readFileSync("./data/pair_words_new.txt", "utf8")
     .split("\r\n");
 
   const findNextPairWords = (word) => {
@@ -28,7 +28,7 @@ try {
     buildChain(start, []);
   });
 
-  fs.writeFileSync("./data/start_words.txt", startWords.join("\r\n"));
+  fs.writeFileSync("./data/start_words_new.txt", startWords.join("\r\n"));
 } catch (e) {
   console.log("Error:", e.stack);
 }

@@ -2,7 +2,7 @@ const fs = require("fs");
 
 try {
   const startWords = fs
-    .readFileSync("./data/start_words.txt", "utf8")
+    .readFileSync("./data/start_words_new.txt", "utf8")
     .split("\r\n");
 
   const prefixCount = {};
@@ -25,7 +25,7 @@ try {
   });
 
   fs.writeFileSync(
-    "./data/start-prefixes.txt",
+    "./data/start-prefixes-new.txt",
     results
       .map(([word, count]) => word)
       .slice(0, 30)
