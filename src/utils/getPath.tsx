@@ -14,19 +14,23 @@ const getPath = (prefix: string) => {
   const candidates = pairWords.filter((word) => word.startsWith(prefix));
 
   // where possible select a candiate that has a pathway
-  const candidateWithPaths: string[] = [];
+  const candidatesWithPaths: string[] = [];
   candidates.forEach((word) => {
     const suffix = word.slice(-4);
     const pathways = pairWords.filter((pairWord) => pairWord.startsWith(suffix))
       .length;
     if (pathways > 0) {
-      candidateWithPaths.push(word);
+      candidatesWithPaths.push(word);
     }
   });
 
-  const candidate = !!candidateWithPaths.length
-    ? candidateWithPaths[~~(Math.random() * candidateWithPaths.length)]
+  const candidate = !!candidatesWithPaths.length
+    ? candidatesWithPaths[~~(Math.random() * candidatesWithPaths.length)]
     : candidates[~~(Math.random() * candidates.length)];
+
+  if (!candidate) {
+    return [];
+  }
 
   const randomCharacter = alphabet[Math.floor(Math.random() * alphabet.length)];
 

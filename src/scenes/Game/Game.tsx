@@ -26,6 +26,9 @@ const Game = () => {
       return;
     }
     const newPath = getPath(prefix);
+    if (!newPath.length) {
+      alert("You got lost!");
+    }
     setPath(newPath);
   }, [prefix]);
 
@@ -76,7 +79,7 @@ const Game = () => {
           {chain.map((word, index) => (
             <React.Fragment key={`${word}-${index}`}>
               <a
-                href={`https://www.dictionary.com/browse/${word}`}
+                href={`https://merriam-webster.com/dictionary/${word}`}
                 rel="noreferrer"
                 target="_blank"
               >
