@@ -15,13 +15,13 @@ const Screen = ({ children, className }: IProps) => (
 export const Container = styled.div`
   background: #aaa;
   border: 0.5rem solid #aaa;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
   box-shadow: 0 0 5px #000;
 `;
 
 export const Inner = styled.div`
   background: #000;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
   padding: 0.5rem;
 
   ul {

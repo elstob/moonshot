@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Chain from "../../components/Chain";
 import Input from "../../components/Input";
+import Lives from "../../components/Lives";
 import Path from "../../components/Path";
 import Stage from "../../components/Stage";
 import checkWord from "../../utils/checkWord";
@@ -12,14 +13,33 @@ interface ILink {
   word: string;
 }
 
+interface IProps {
+  setGameState: (gameState: any) => void;
+}
+
+const COMPLETION_STATES = {
+  DEAD: "DEAD",
+  TIME_UP: "TIME_UP",
+  MOONSHOT: "MOONSHOT",
+};
+
+const COMPLETION_STRINGS = {
+  [COMPLETION_STATES.DEAD]: "You ran out of lives!",
+  [COMPLETION_STATES.MOONSHOT]: "Moonshot! You made it, Congratulations!",
+};
+
+const MOONSHOT_COUNT = 10;
+
 const SWITCH_WORDS = ["able", "less", "ness"];
 
-const Game = () => {
+const Game = ({ setGameState }: IProps) => {
   const [chain, setChain] = useState<ILink[]>([]);
+  const [lives, setLives] = useState(3);
   const [path, setPath] = useState<string[]>([]);
   const [prefix, setPrefix] = useState("");
   const [selection, setSelection] = useState<string[]>([]);
   const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
+  const [completed, setCompleted] = useState<string | null>(null);
 
   const pickLetter = useCallback(
     (index: number) => {
@@ -98,13 +118,28 @@ const Game = () => {
       setPrefix(prefix);
       setChain((chain) => [...chain, { boost, word }]);
     } else {
-      setChain([]);
-      setSelection([]);
-      setSelectedIndexes([]);
-      setPrefix("");
-      alert("GAME OVER!");
+      if (lives > 1) {
+        setLives((lives) => lives - 1);
+        setSelection([]);
+        setSelectedIndexes([]);
+      } else {
+        setLives(0);
+        setCompleted(COMPLETION_STATES.DEAD);
+      }
     }
-  }, [prefix, selection]);
+  }, [chain, lives, prefix, selection, setGameState]);
+
+  useEffect(() => {
+    if (chain.length === MOONSHOT_COUNT) {
+      setCompleted(COMPLETION_STATES.MOONSHOT);
+    }
+  }, [chain.length]);
+
+  useEffect(() => {
+    if (completed) {
+      document.removeEventListener("keydown", keyHandler);
+    }
+  }, [completed, keyHandler]);
 
   return (
     <Stage>
@@ -117,9 +152,25 @@ const Game = () => {
         />
       )}
       <Input value={`${prefix}${selection.join("")}`} />
-      {/* {prefix && <Word value={prefix}></Word>}
-      {!!selection.length && <Word value={} />} */}
       <Chain chain={chain} />
+      {!!lives && <Lives count={lives} />}
+      {completed && (
+        <div>
+          <h2>{COMPLETION_STRINGS[completed]}</h2>
+          <button
+            onClick={() => {
+              setGameState((gameState: any) => ({
+                ...gameState,
+                chain,
+                lives,
+                scene: "gameOver",
+              }));
+            }}
+          >
+            View Final Score
+          </button>
+        </div>
+      )}
     </Stage>
   );
 };

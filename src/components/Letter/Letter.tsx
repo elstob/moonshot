@@ -12,9 +12,11 @@ const Letter = ({ className, offset, value }: IProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    let id: number;
     if (value && display && value !== display) {
-      setTimeout(() => setDisplay(value), 100 * offset);
+      id = setTimeout(() => setDisplay(value), 100 * offset);
     }
+    return () => clearTimeout(id);
   }, [display, offset, value]);
 
   return (
