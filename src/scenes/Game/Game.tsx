@@ -142,7 +142,7 @@ const Game = ({ setGameState }: IProps) => {
   }, [completed, keyHandler]);
 
   return (
-    <Stage>
+    <Stage offset={chain.length}>
       {!!path.length && (
         <Path
           pickLetter={pickLetter}
