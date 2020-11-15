@@ -44,7 +44,7 @@ const Container = styled.div`
   position: relative;
   text-align: center;
   user-select: none;
-  width: 60rem;
+  width: 66rem;
 `;
 
 const Star = styled.div<{ selected: boolean }>`
@@ -54,9 +54,10 @@ const Star = styled.div<{ selected: boolean }>`
   color: white;
   cursor: pointer;
   display: inline-block;
-  font-size: 3rem;
-  height: 3rem;
-  line-height: 3rem;
+  font-family: "Codystar", sans-serif;
+  font-size: 5rem;
+  height: 5rem;
+  line-height: 5rem;
   margin: 3rem;
   opacity: ${({ selected }) => (selected ? 0.2 : 1)};
   position: relative;
@@ -64,7 +65,7 @@ const Star = styled.div<{ selected: boolean }>`
   text-transform: uppercase;
   text-shadow: 0px 0px 10px transparent;
   transition: all 0.5s ease-in;
-  width: 3rem;
+  width: 5rem;
 
   &:nth-child(1) {
     top: -2rem;

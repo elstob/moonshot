@@ -132,6 +132,10 @@ html {
   background: #001;
 }
 
+body {
+  font-family: Goldman, sans-serif;
+}
+
 * {
   box-sizing: border-box;
 }

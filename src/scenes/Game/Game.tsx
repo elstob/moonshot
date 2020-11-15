@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Chain from "../../components/Chain";
+import Completed from "../../components/Completed";
 import Input from "../../components/Input";
 import Lives from "../../components/Lives";
 import Path from "../../components/Path";
@@ -24,8 +25,14 @@ const COMPLETION_STATES = {
 };
 
 const COMPLETION_STRINGS = {
-  [COMPLETION_STATES.DEAD]: "You ran out of lives!",
-  [COMPLETION_STATES.MOONSHOT]: "Moonshot! You made it, Congratulations!",
+  [COMPLETION_STATES.DEAD]: {
+    body: "You ran out of lives!",
+    title: "Game Over",
+  },
+  [COMPLETION_STATES.MOONSHOT]: {
+    body: "You made it. Congratulations!",
+    title: "MOONSHOT",
+  },
 };
 
 const MOONSHOT_COUNT = 10;
@@ -143,7 +150,7 @@ const Game = ({ setGameState }: IProps) => {
 
   return (
     <Stage offset={chain.length}>
-      {!!path.length && (
+      {!completed && !!path.length && (
         <Path
           pickLetter={pickLetter}
           removeLetter={removeLetter}
@@ -151,25 +158,22 @@ const Game = ({ setGameState }: IProps) => {
           value={path}
         />
       )}
-      <Input value={`${prefix}${selection.join("")}`} />
+      {!completed && <Input value={`${prefix}${selection.join("")}`} />}
       <Chain chain={chain} />
       {!!lives && <Lives count={lives} />}
       {completed && (
-        <div>
-          <h2>{COMPLETION_STRINGS[completed]}</h2>
-          <button
-            onClick={() => {
-              setGameState((gameState: any) => ({
-                ...gameState,
-                chain,
-                lives,
-                scene: "gameOver",
-              }));
-            }}
-          >
-            View Final Score
-          </button>
-        </div>
+        <Completed
+          body={COMPLETION_STRINGS[completed].body}
+          title={COMPLETION_STRINGS[completed].title}
+          progress={() =>
+            setGameState((oldGameState: any) => ({
+              ...oldGameState,
+              chain,
+              lives,
+              scene: "gameOver",
+            }))
+          }
+        />
       )}
     </Stage>
   );
