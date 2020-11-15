@@ -1,14 +1,21 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Chain from "../../components/Chain";
+import Input from "../../components/Input";
 import Path from "../../components/Path";
 import Stage from "../../components/Stage";
-import Word from "../../components/Word";
 import checkWord from "../../utils/checkWord";
 import getPath from "../../utils/getPath";
 import getStartWord from "../../utils/getStartWord";
 
+interface ILink {
+  boost: boolean;
+  word: string;
+}
+
+const SWITCH_WORDS = ["able", "less", "ness"];
+
 const Game = () => {
-  const [chain, setChain] = useState<string[]>([]);
+  const [chain, setChain] = useState<ILink[]>([]);
   const [path, setPath] = useState<string[]>([]);
   const [prefix, setPrefix] = useState("");
   const [selection, setSelection] = useState<string[]>([]);
@@ -79,8 +86,17 @@ const Game = () => {
     if (checkWord(word)) {
       setSelection([]);
       setSelectedIndexes([]);
-      setPrefix(suffix);
-      setChain((chain) => [...chain, word]);
+
+      let boost = false;
+      let prefix = suffix;
+      if (SWITCH_WORDS.includes(prefix)) {
+        console.log("C-C-C-C-Combo breaker!!!");
+        boost = true;
+        prefix = getStartWord();
+      }
+
+      setPrefix(prefix);
+      setChain((chain) => [...chain, { boost, word }]);
     } else {
       setChain([]);
       setSelection([]);
@@ -100,8 +116,9 @@ const Game = () => {
           value={path}
         />
       )}
-      {prefix && <Word value={prefix}></Word>}
-      {!!selection.length && <Word value={selection.join("")} />}
+      <Input value={`${prefix}${selection.join("")}`} />
+      {/* {prefix && <Word value={prefix}></Word>}
+      {!!selection.length && <Word value={} />} */}
       <Chain chain={chain} />
     </Stage>
   );
