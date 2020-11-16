@@ -164,6 +164,7 @@ const Game = ({ setGameState }: IProps) => {
       {completed && (
         <Completed
           body={COMPLETION_STRINGS[completed].body}
+          moon={chain.length === MOONSHOT_COUNT}
           title={COMPLETION_STRINGS[completed].title}
           progress={() =>
             setGameState((oldGameState: any) => ({

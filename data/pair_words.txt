@@ -3470,6 +3470,7 @@ moonlike
 moonpath
 moonrise
 moonsail
+moonshot
 moonseed
 moonsick
 moontide

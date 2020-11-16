@@ -3,15 +3,18 @@ import styled, { keyframes } from "styled-components";
 
 interface IProps {
   body: string;
+  moon: boolean;
   progress: () => void;
   title: string;
 }
 
-const Completed = ({ body, progress, title }: IProps) => (
+const Completed = ({ body, moon, progress, title }: IProps) => (
   <>
-    <Moon>
-      <img alt="" src="/images/moon.png" />
-    </Moon>
+    {moon && (
+      <Moon>
+        <img alt="" src="/images/moon.png" />
+      </Moon>
+    )}
     <Container>
       <h2>{title}</h2>
       <p>{body}</p>
