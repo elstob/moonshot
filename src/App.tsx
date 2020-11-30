@@ -15,7 +15,7 @@ function App() {
       {gameState.scene === "intro" && <Intro setGameState={setGameState} />}
       {gameState.scene === "game" && <Game setGameState={setGameState} />}
       {gameState.scene === "gameOver" && (
-        <GameOver setGameState={setGameState} />
+        <GameOver gameState={gameState} setGameState={setGameState} />
       )}
       {gameState.scene === "guide" && <Guide setGameState={setGameState} />}
     </div>
