@@ -9,15 +9,16 @@ interface IProps {
 }
 
 const GameOver = ({ gameState, setGameState }: IProps) => {
-  const { chain, lives } = gameState;
+  const { chain, lives, timeLeft } = gameState;
 
   const chainScore = 100 * chain.length;
   const livesScore = 300 * lives;
   const moonshotBonus = chain.length === 10 ? 1000 : 0;
   const multiplier = chain.filter((link: any) => link.boost).length;
+  const timeScore = !!lives ? Math.ceil((10 * (timeLeft / 1000)) / 10) * 10 : 0;
 
   const subTotal =
-    Math.ceil((chainScore + livesScore + moonshotBonus) / 10) * 10;
+    Math.ceil((chainScore + livesScore + moonshotBonus + timeScore) / 10) * 10;
   const total = Math.ceil(((multiplier + 1) * subTotal) / 10) * 10;
 
   return (
@@ -31,6 +32,13 @@ const GameOver = ({ gameState, setGameState }: IProps) => {
             Lives Left:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             {livesScore} ({lives} x 300)
             <br />
+            {!!lives && (
+              <>
+                Time Left:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {timeScore} ({Math.ceil((10 * (timeLeft / 1000)) / 10)} x 10)
+                <br />
+              </>
+            )}
             Moonshot Bonus:&nbsp;&nbsp;&nbsp;&nbsp;{moonshotBonus}
             <br />
             <br />

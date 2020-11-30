@@ -35,7 +35,7 @@ const getPath = (prefix: string) => {
     return [];
   }
 
-  console.log(candidate.slice(-4));
+  // console.log(candidate.slice(-4));
 
   const letters = shuffleArray([
     ...`${candidate.slice(-4)}`.split(""),

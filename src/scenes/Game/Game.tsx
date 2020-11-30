@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
+import useCountDown from "react-countdown-hook";
 import Chain from "../../components/Chain";
 import Completed from "../../components/Completed";
 import Input from "../../components/Input";
 import Lives from "../../components/Lives";
 import Path from "../../components/Path";
 import Stage from "../../components/Stage";
+import Timer from "../../components/Timer";
 import checkWord from "../../utils/checkWord";
 import getPath from "../../utils/getPath";
 import getStartWord from "../../utils/getStartWord";
@@ -32,6 +34,10 @@ const COMPLETION_STRINGS = {
   [COMPLETION_STATES.MOONSHOT]: {
     body: "You made it. Congratulations!",
     title: "MOONSHOT",
+  },
+  [COMPLETION_STATES.TIME_UP]: {
+    body: "You ran out of time!",
+    title: "Game Over",
   },
 };
 
@@ -80,6 +86,14 @@ const Game = ({ setGameState }: IProps) => {
     [path, pickLetter, selectedIndexes, selection.length]
   );
 
+  // Timer
+  const [timeLeft, { start, pause }] = useCountDown(60 * 1000);
+
+  useEffect(() => {
+    start();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     document.addEventListener("keydown", keyHandler);
     return () => document.removeEventListener("keydown", keyHandler);
@@ -119,7 +133,6 @@ const Game = ({ setGameState }: IProps) => {
       let boost = false;
       let prefix = suffix;
       if (SWITCH_WORDS.includes(prefix)) {
-        console.log("C-C-C-C-Combo breaker!!!");
         boost = true;
         prefix = getStartWord();
       }
@@ -132,17 +145,26 @@ const Game = ({ setGameState }: IProps) => {
         setSelection([]);
         setSelectedIndexes([]);
       } else {
+        pause();
         setLives(0);
         setCompleted(COMPLETION_STATES.DEAD);
       }
     }
-  }, [chain, lives, prefix, selection, setGameState]);
+  }, [chain, lives, pause, prefix, selection]);
 
   useEffect(() => {
     if (chain.length === MOONSHOT_COUNT) {
+      pause();
       setCompleted(COMPLETION_STATES.MOONSHOT);
     }
-  }, [chain.length]);
+  }, [chain.length, pause]);
+
+  useEffect(() => {
+    if (prefix && timeLeft <= 0) {
+      pause();
+      setCompleted(COMPLETION_STATES.TIME_UP);
+    }
+  }, [pause, prefix, timeLeft]);
 
   useEffect(() => {
     if (completed) {
@@ -163,6 +185,9 @@ const Game = ({ setGameState }: IProps) => {
       {!completed && <Input value={`${prefix}${selection.join("")}`} />}
       <Chain chain={chain} />
       {!!lives && <Lives count={lives} />}
+
+      {!completed && <Timer time={timeLeft / 1000} />}
+
       {completed && (
         <Completed
           body={COMPLETION_STRINGS[completed].body}
@@ -173,6 +198,7 @@ const Game = ({ setGameState }: IProps) => {
               ...oldGameState,
               chain,
               lives,
+              timeLeft,
               scene: "gameOver",
             }))
           }

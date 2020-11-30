@@ -9077,6 +9077,11 @@ react-app-polyfill@^2.0.0:
     regenerator-runtime "^0.13.7"
     whatwg-fetch "^3.4.1"
 
+react-countdown-hook@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-countdown-hook/-/react-countdown-hook-1.0.1.tgz#4d4f380ca1663205599ca4d579df3643babe60dd"
+  integrity sha512-3koo2MVCRkcGMdSXb4+lu2N5wzCM9HOJbXPhz97tbhJ4pzwgnbx37wfxPmWD6KdfluwDl43kK32Q28LVdTDb5A==
+
 react-dev-utils@^11.0.0:
   version "11.0.0"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-11.0.0.tgz#9fdb1b173f4ffc1f23fcf98465d93b16a860b73e"
