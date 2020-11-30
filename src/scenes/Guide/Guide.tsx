@@ -20,13 +20,13 @@ const Guide = ({ setGameState }: IProps) => {
               🌕
             </p>
             <p>
-              You’ll start with a 4 letter word and 5 starry letters 💫 These
+              You’ll start with a 4 letter word and 6 starry letters 💫 These
               stars contain a possible 4 letter combination that, when added to
               your starting word, will make an 8 letter link in your chain.
             </p>
             <p>
               For example you may be given the word <strong>MOON</strong> to
-              start with and 5 stars to choose from: H, U, S, O &amp; T. By
+              start with and 6 stars to choose from: H, U, S, O, C &amp; T. By
               selecting (or typing) the S, H, O &amp; T star letters you can
               make the word <strong>MOONSHOT</strong>! Your ship will blast
               forward and <strong>SHOT</strong> will be the starting word for

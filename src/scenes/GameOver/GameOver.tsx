@@ -41,16 +41,37 @@ const GameOver = ({ gameState, setGameState }: IProps) => {
             <br />
             <br />
             Final Score:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{total}
+            <br />
+            Your high score:&nbsp;&nbsp;&nbsp;
+            {gameState.highScore > total ? gameState.highScore : total}
+            <br />
           </div>
         </StyledScreen>
+        <Button
+          onClick={() =>
+            setGameState((gameState: any) => ({
+              ...gameState,
+              highScore:
+                gameState.highScore > total ? gameState.highScore : total,
+              scene: "game",
+            }))
+          }
+        >
+          Play Again
+        </Button>
+        <Button
+          onClick={() =>
+            setGameState((gameState: any) => ({
+              ...gameState,
+              highScore:
+                gameState.highScore > total ? gameState.highScore : total,
+              scene: "intro",
+            }))
+          }
+        >
+          Go Home
+        </Button>
       </Container>
-      <Button
-        onClick={() =>
-          setGameState((gameState: any) => ({ ...gameState, scene: "game" }))
-        }
-      >
-        Play Again
-      </Button>
     </Stage>
   );
 };
@@ -60,12 +81,11 @@ const Button = styled.button`
   background: #ddd;
   color: #000;
   cursor: pointer;
-  display: block;
   font-family: monospace;
   font-size: 2rem;
   font-weight: bold;
   letter-spacing: 2px;
-  margin: 10rem auto;
+  margin: 2rem 1rem;
   text-transform: uppercase;
   padding: 1rem;
 `;

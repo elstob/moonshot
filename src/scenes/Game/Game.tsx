@@ -37,7 +37,7 @@ const COMPLETION_STRINGS = {
 
 const MOONSHOT_COUNT = 10;
 
-const SWITCH_WORDS = ["able", "less", "ness"];
+const SWITCH_WORDS = ["able", "less", "ling", "ness"];
 
 const Game = ({ setGameState }: IProps) => {
   const [chain, setChain] = useState<ILink[]>([]);
@@ -97,9 +97,11 @@ const Game = ({ setGameState }: IProps) => {
     if (!prefix) {
       return;
     }
-    const newPath = getPath(prefix);
+    let newPath = getPath(prefix);
     if (!newPath.length) {
-      alert("You got lost!");
+      const replacement = getStartWord();
+      newPath = getPath(prefix);
+      setPrefix(replacement);
     }
     setPath(newPath);
   }, [prefix]);
